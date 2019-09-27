@@ -27,8 +27,7 @@ vector<double> E;
 vector<GRFstruct> GRFs;
 vector<vector<inputNeuron>> spikeOrder;
 vector<int> NeuronFired;
-vector<double> psps;
-vector<double> gammas;
+
 
 ConfusionMatrixStruct ConfusionMatrix;
 vector<data_auc_struct> dataSorted;
@@ -132,7 +131,7 @@ void InitializeNeuron(neuron *n_i, const vector<double> &Window) { //Initalize n
     normal_distribution<double> distribution(avgW, stdW);
     n_i->outputValue = distribution(generator);
     n_i->M += 1;
-    n_i->age = neuronAge;
+    n_i->additionTime = neuronAge;
     neuronAge++;
 }
 
@@ -200,13 +199,13 @@ neuron *FindMostSimilar(neuron *n_i) { //find mos similar neurons in terms of sy
 }
 
 void ReplaceOldest(neuron *n_i) { //replace the oldets neuron in output repostiory
-    int oldest = OutputNeurons[0]->age;
+    int oldest = OutputNeurons[0]->additionTime;
     int oldestIdx = 0;
 
 
     for (int l = 1; l < OutputNeurons.size(); l++) {
-        if (oldest > OutputNeurons[l]->age) {
-            oldest = OutputNeurons[l]->age;
+        if (oldest < OutputNeurons[l]->additionTime) {
+            oldest = OutputNeurons[l]->additionTime;
             oldestIdx = l;
         }
     }
@@ -326,9 +325,7 @@ void TraineSNN() { //main RTAD-eSNN procedure
 
         neuron *n_f = NeuronSpikeFirst();
 
-        NeuronFired.push_back(n_f->age);
-        psps.push_back(n_f->PSP);
-        gammas.push_back(n_f->gamma);
+        NeuronFired.push_back(n_f->additionTime);
         double y_t_1 = n_f->outputValue;
 
         Y.push_back(y_t_1);
@@ -374,6 +371,23 @@ void SaveMetrics(string filePath, double precision, double recall, double fMeasu
     handler << " ErrorFactor: " << ErrorFactor << " AnomalyFactor: " << AnomalyFactor << endl;
     handler << "Metrics: " << endl;
     handler << "Precision " << precision << " Recall " << recall << " fMeasure " << fMeasure << " AUC " << Auc;
+
+
+
+    handler.close();
+}
+
+void SaveMetricsTrace(string filePath, double precision, double recall, double fMeasure, double Auc) {
+    fstream handler;
+    handler.open(filePath, iostream::out | iostream::app);
+
+    handler << "eSNN Parameters:" << endl;
+    handler << "NOsize: " << NOsize << " Wsize: " << Wsize << " NIsize: " << NIsize;
+    handler << " Beta: " << Beta << " TS: " << TS << " sim: " << sim << " mod: " << mod << " C: " << C;
+    handler << " ErrorFactor: " << ErrorFactor << " AnomalyFactor: " << AnomalyFactor << endl;
+    handler << "Metrics: " << endl;
+    handler << "Precision " << precision << " Recall " << recall << " fMeasure " << fMeasure << " AUC " << Auc << endl;
+    handler << endl;
 
     handler.close();
 }

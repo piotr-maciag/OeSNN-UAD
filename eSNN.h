@@ -26,7 +26,7 @@ struct neuron
     double outputValue;
     double M;
     double PSP;
-    int age;
+    int additionTime;
 }; //output neuron structure
 
 struct inputValue
@@ -81,7 +81,7 @@ void TraineSNN(); //main procedure of eSNN-RTAD
 void SaveResults(string filePath);
 void ClearStructures();
 void SaveMetrics(string, double, double, double, double);
-
+void SaveMetricsTrace(string, double, double, double, double);
 
 struct ConfusionMatrixStruct
 {

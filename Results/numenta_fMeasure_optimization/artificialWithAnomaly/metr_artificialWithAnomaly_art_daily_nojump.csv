@@ -1,0 +1,4 @@
+eSNN Parameters:
+NOsize: 50 Wsize: 200 NIsize: 30 Beta: 1.6 TS: 1000 sim: 0.15 mod: 0.6 C: 0.6 ErrorFactor: 0.9 AnomalyFactor: 8
+Metrics: 
+Precision 0.113786 Recall 0.129032 fMeasure 0.12093 AUC 0.508716

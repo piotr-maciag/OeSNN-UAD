@@ -35,11 +35,11 @@ int main() {
 
     vector<string> folders = {
             "artificialWithAnomaly",
-            //"realAdExchange",
-            //"realAWSCloudwatch",
-            //"realKnownCause",
-            //"realTraffic",
-            //"realTweets"
+            "realAdExchange",
+            "realAWSCloudwatch",
+            "realKnownCause",
+            "realTraffic",
+            "realTweets"
     };
 
     for (int j = 0; j < folders.size(); j++) {
@@ -52,7 +52,7 @@ int main() {
 
         double o_NOsize, o_Wsize, o_NIsize, o_Beta, o_TS, o_sim, o_mod, o_C, o_ErrorFactor, o_AnomalyFactor; //optimal found parametes of eSNN
 
-        double NOsize_b = 50, NOsize_e = 150, NOsize_s = 100; //parameters for grid search
+        double NOsize_b = 50, NOsize_e = 150, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
         double Wsize_b = 100, Wsize_e = 600, Wsize_s = 100;
         double NIsize_b = 10, NIsize_e = 30, NIsize_s = 20;
         double Beta_b = 1.6, Beta_e = 1.6, Beta_s = 0.2;
@@ -61,7 +61,7 @@ int main() {
         double mod_b = 0.6, mod_e = 0.6, mod_s = 0.1;
         double C_b = 0.6, C_e = 0.6, C_s = 0.1;
         double ErrorFactor_b = 0.9, ErrorFactor_e = 0.9, ErrorFactor_s = 0.1;
-        double AnomalyFactor_b = 4, AnomalyFactor_e = 10, AnomalyFactor_s = 1;
+        double AnomalyFactor_b = 2, AnomalyFactor_e = 7, AnomalyFactor_s = 1;
 
         double maxMeanFMeasure = 0.0; //optimize max Mean FMeasure over datasets in each folder
         int Trials = 5; //for each set of eSNN parameters perform num of Trials, average results
@@ -130,6 +130,11 @@ int main() {
 
                                                 cout << "Actual meanFMeasure " << meanFMeasure << endl;
 
+                                                string metricsFilePath = resultsPath + "\\" + folder + "\\" +
+                                                                         "metr_Overall_OptimizationTrace_" + folder;
+                                                SaveMetricsTrace(metricsFilePath, meanPrecision, meanRecall,
+                                                            meanFMeasure, meanAUC); //save optimal paramterers and metrics to file
+
                                                 if (meanFMeasure > maxMeanFMeasure) { //rember parametrs for mzx mean FMeasure
                                                     maxMeanFMeasure = meanFMeasure;
                                                     o_NOsize = NOsize;
@@ -144,7 +149,7 @@ int main() {
                                                     o_AnomalyFactor = AnomalyFactor;
 
                                                     string metricsFilePath = resultsPath + "\\" + folder + "\\" +
-                                                                             "metr_Overall_Dataset_" + folder;
+                                                                             "metr_Overall_Optimal_" + folder;
                                                     SaveMetrics(metricsFilePath, meanPrecision, meanRecall,
                                                                 meanFMeasure, meanAUC); //save optimal paramterers and metrics to file
                                                 }
