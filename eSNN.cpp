@@ -172,7 +172,8 @@ bool ClassifyAnomaly(double x, double y) { //anomaly classification function
     return (E[E.size() - 1] - avgE) > AnomalyFactor * stdE;
 }
 
-double CalculateDistance(const vector<double> &v1, const vector<double> &v2) { //calculate distance between two weights vectors
+double
+CalculateDistance(const vector<double> &v1, const vector<double> &v2) { //calculate distance between two weights vectors
     double diffSq = 0.0;
 
     for (int j = 0; j < v1.size(); j++) {
@@ -290,12 +291,8 @@ void TraineSNN() { //main RTAD-eSNN procedure
 
     for (int t = Wsize; t < X.size(); t++) {
 
-        if (Window.size() == Wsize - 1) {
-            Window.push_back(X[t].value);
-        } else {
-            Window.erase(Window.begin());
-            Window.push_back(X[t].value);
-        }
+        Window.erase(Window.begin());
+        Window.push_back(X[t].value);
 
         InitializeGRFs(Window);
 
@@ -371,7 +368,6 @@ void SaveMetrics(string filePath, double precision, double recall, double fMeasu
     handler << " ErrorFactor: " << ErrorFactor << " AnomalyFactor: " << AnomalyFactor << endl;
     handler << "Metrics: " << endl;
     handler << "Precision " << precision << " Recall " << recall << " fMeasure " << fMeasure << " AUC " << Auc;
-
 
 
     handler.close();
@@ -484,39 +480,32 @@ void CalculateConfusionMatrix() {
     }
 }
 
-double CalculatePrecision()
-{
-    if(ConfusionMatrix.TP == 0)
-    {
+double CalculatePrecision() {
+    if (ConfusionMatrix.TP == 0) {
         return (0.0000001);
-    }
-    else
-    {
-        return (double(ConfusionMatrix.TP)/double((ConfusionMatrix.TP+ConfusionMatrix.FP)));
+    } else {
+        return (double(ConfusionMatrix.TP) / double((ConfusionMatrix.TP + ConfusionMatrix.FP)));
     }
 }
-double CalculateRecall()
-{
-    if(ConfusionMatrix.TP == 0)
-    {
+
+double CalculateRecall() {
+    if (ConfusionMatrix.TP == 0) {
         return (0.0000001);
-    }
-    else
-    {
-        return (double(ConfusionMatrix.TP)/double((ConfusionMatrix.TP+ConfusionMatrix.FN)));
+    } else {
+        return (double(ConfusionMatrix.TP) / double((ConfusionMatrix.TP + ConfusionMatrix.FN)));
     }
 }
-double CalculateF_Measure(double precision, double recall)
-{
-    return (2*precision*recall)/(precision + recall);
+
+double CalculateF_Measure(double precision, double recall) {
+    return (2 * precision * recall) / (precision + recall);
 }
 
 double CalculateAUC() {//not used! only approximation of AUC for binary classiier
 
     double AUC = 0.0;
 
-    double sse = (double(ConfusionMatrix.TP))/(double(ConfusionMatrix.TP + ConfusionMatrix.FN))/2.0;
-    double spe = (double(ConfusionMatrix.TN))/(double(ConfusionMatrix.TN + ConfusionMatrix.FP))/2.0;
+    double sse = (double(ConfusionMatrix.TP)) / (double(ConfusionMatrix.TP + ConfusionMatrix.FN)) / 2.0;
+    double spe = (double(ConfusionMatrix.TN)) / (double(ConfusionMatrix.TN + ConfusionMatrix.FP)) / 2.0;
 
-    return (sse+spe);
+    return (sse + spe);
 }

@@ -1,0 +1,10 @@
+        double NOsize_b = 50, NOsize_e = 150, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
+        double Wsize_b = 100, Wsize_e = 600, Wsize_s = 100;
+        double NIsize_b = 10, NIsize_e = 30, NIsize_s = 20;
+        double Beta_b = 1.6, Beta_e = 1.6, Beta_s = 0.2;
+        double TS_b = 1000, TS_e = 1000, TS_s = 1000;
+        double sim_b = 0.15, sim_e = 0.15, sim_s = 0.15;
+        double mod_b = 0.6, mod_e = 0.6, mod_s = 0.1;
+        double C_b = 0.6, C_e = 0.6, C_s = 0.1;
+        double ErrorFactor_b = 0.7, ErrorFactor_e = 0.9, ErrorFactor_s = 0.1;
+        double AnomalyFactor_b = 2, AnomalyFactor_e = 7, AnomalyFactor_s = 1;
