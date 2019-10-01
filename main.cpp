@@ -27,7 +27,7 @@ void PrintActualParameters() {
 int main() {
 
 
-    string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+    /*string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
                   "\\Datasets\\numenta\\";
 
     string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
@@ -40,7 +40,21 @@ int main() {
             "realKnownCause",
             "realTraffic",
             "realTweets"
+    };*/
+
+    string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+                  "\\Datasets\\Yahoo\\";
+
+    string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+                         "\\Results\\yahoo_fMeasure_optimization\\";
+
+    vector<string> folders = {
+            "A1Benchmark",
+          //  "A2Benchmark",
+         //   "A3Benchmark",
+        //    "A4Benchmark",
     };
+
 
     for (int j = 0; j < folders.size(); j++) {
         string folder = folders[j];
@@ -52,7 +66,7 @@ int main() {
 
         double o_NOsize, o_Wsize, o_NIsize, o_Beta, o_TS, o_sim, o_mod, o_C, o_ErrorFactor, o_AnomalyFactor; //optimal found parametes of eSNN
 
-        double NOsize_b = 50, NOsize_e = 150, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
+        /*double NOsize_b = 50, NOsize_e = 150, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
         double Wsize_b = 100, Wsize_e = 600, Wsize_s = 100;
         double NIsize_b = 10, NIsize_e = 30, NIsize_s = 20;
         double Beta_b = 1.6, Beta_e = 1.6, Beta_s = 0.2;
@@ -61,12 +75,23 @@ int main() {
         double mod_b = 0.6, mod_e = 0.6, mod_s = 0.1;
         double C_b = 0.6, C_e = 0.6, C_s = 0.1;
         double ErrorFactor_b = 0.7, ErrorFactor_e = 0.9, ErrorFactor_s = 0.1;
-        double AnomalyFactor_b = 2, AnomalyFactor_e = 7, AnomalyFactor_s = 1;
+        double AnomalyFactor_b = 2, AnomalyFactor_e = 7, AnomalyFactor_s = 1;*/
 
-        //double maxMeanFMeasure = 0.0; //optimize max Mean FMeasure over datasets in each folder
-        double maxMeanPrecision = 0.0;
+        double NOsize_b = 50, NOsize_e = 50, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
+        double Wsize_b = 100, Wsize_e = 600, Wsize_s = 100;
+        double NIsize_b = 10, NIsize_e = 10, NIsize_s = 20;
+        double Beta_b = 1.6, Beta_e = 1.6, Beta_s = 0.2;
+        double TS_b = 1000, TS_e = 1000, TS_s = 1000;
+        double sim_b = 0.15, sim_e = 0.15, sim_s = 0.15;
+        double mod_b = 0.6, mod_e = 0.6, mod_s = 0.1;
+        double C_b = 0.8, C_e = 0.8, C_s = 0.1;
+        double ErrorFactor_b = 0.9, ErrorFactor_e = 0.9, ErrorFactor_s = 0.1;
+        double AnomalyFactor_b = 8, AnomalyFactor_e = 15, AnomalyFactor_s = 1;
 
-        int Trials = 5; //for each set of eSNN parameters perform num of Trials, average results
+        double maxMeanFMeasure = 0.0; //optimize max Mean FMeasure over datasets in each folder
+        //double maxMeanPrecision = 0.0;
+
+        int Trials = 1; //for each set of eSNN parameters perform num of Trials, average results
 
         cout << "#####################################################################" << endl;
         cout << folder << endl;
@@ -130,22 +155,22 @@ int main() {
                                                 meanRecall /= Trials;
                                                 meanAUC /= Trials;
 
-                                                //cout << "Actual meanFMeasure " << meanFmeasure << endl;
+                                                cout << "Actual meanFMeasure " << meanFMeasure << endl;
 
-                                                cout << "Actual meanRecall " << meanRecall << endl;
-                                                cout << "Actual meanPrecision " << meanPrecision << endl;
+                                                //cout << "Actual meanRecall " << meanRecall << endl;
+                                                //cout << "Actual meanPrecision " << meanPrecision << endl;
 
                                                 string metricsFilePath = resultsPath + "\\" + folder + "\\" +
                                                                          "metr_Overall_OptimizationTrace_" + folder;
                                                 SaveMetricsTrace(metricsFilePath, meanPrecision, meanRecall,
                                                             meanFMeasure, meanAUC); //save optimal paramterers and metrics to file
 
-                                                //if (meanFMeasure > maxMeanFMeasure) { //rember parametrs for mzx mean FMeasure
-                                                //   maxMeanFMeasure = meanFMeasure;
+                                                if (meanFMeasure > maxMeanFMeasure) { //rember parametrs for mzx mean FMeasure
+                                                   maxMeanFMeasure = meanFMeasure;
 
-                                                if(meanPrecision >= maxMeanPrecision)
-                                                {
-                                                    maxMeanPrecision = meanPrecision;
+                                                //if(meanPrecision >= maxMeanPrecision)
+                                                //{
+                                                //    maxMeanPrecision = meanPrecision;
                                                     o_NOsize = NOsize;
                                                     o_Wsize = Wsize;
                                                     o_NIsize = NIsize;
@@ -184,8 +209,8 @@ int main() {
         mod = o_mod, C = o_C, ErrorFactor = o_ErrorFactor, AnomalyFactor = o_AnomalyFactor;
 
         PrintActualParameters();
-        //cout << "Optimized meanFMeasure " << maxMeanFMeasure << endl;
-        cout << "Optimized mean precision " << maxMeanPrecision<< endl;
+        cout << "Optimized meanFMeasure " << maxMeanFMeasure << endl;
+        //cout << "Optimized mean precision " << maxMeanPrecision<< endl;
 
 
         for (int i = 2; i < files.size(); i++) {
