@@ -349,7 +349,7 @@ void SaveResults(string filePath) {
 
     handler << "timestamp,value,predicted_value,error,p_label,fired,r_label" << endl;
     for (int t = 0; t < X.size(); t++) {
-        handler << setprecision(12) << X[t].timeStamp << "," << X[t].value << "," << Y[t] << "," << E[t] << "," << U[t]
+        handler << setprecision(12) << X[t].t << "," << X[t].timeStamp << "," << X[t].value << "," << Y[t] << "," << E[t] << "," << U[t]
                 << ",";
         handler << NeuronFired[t] << "," << X[t].r_label;
         handler << endl;
@@ -373,16 +373,12 @@ void SaveMetrics(string filePath, double precision, double recall, double fMeasu
     handler.close();
 }
 
-void SaveMetricsTrace(string filePath, double precision, double recall, double fMeasure, double Auc) {
+void SaveMetricsOverall(string filePath, double precision, double recall, double fMeasure) {
     fstream handler;
-    handler.open(filePath, iostream::out | iostream::app);
+    handler.open(filePath, iostream::out);
 
-    handler << "eSNN Parameters:" << endl;
-    handler << "NOsize: " << NOsize << " Wsize: " << Wsize << " NIsize: " << NIsize;
-    handler << " Beta: " << Beta << " TS: " << TS << " sim: " << sim << " mod: " << mod << " C: " << C;
-    handler << " ErrorFactor: " << ErrorFactor << " AnomalyFactor: " << AnomalyFactor << endl;
     handler << "Metrics: " << endl;
-    handler << "Precision " << precision << " Recall " << recall << " fMeasure " << fMeasure << " AUC " << Auc << endl;
+    handler << "Precision " << precision << " Recall " << recall << " fMeasure " << fMeasure  << endl;
     handler << endl;
 
     handler.close();
@@ -413,13 +409,13 @@ bool compValDataSort(const data_auc_struct &d1, const data_auc_struct &d2) {
     return d1.value > d2.value;
 }
 
-void LoadData(string fileName) {
+void LoadDataTrain(string fileName) {
     fstream handler;
 
     datasetSize = CountInstances(fileName); // zlicz l. instancji w pliku
 
     handler.open(fileName);
-    for (int i = 0; i < datasetSize; i++) {
+    for (int i = 0; i < floor(datasetSize*0.4); i++) {
         string line;
         getline(handler, line);
         stringstream linestream(line);
@@ -433,7 +429,7 @@ void LoadData(string fileName) {
             getline(linestream, dataPortion, ' ');
             int r_label = stoi(dataPortion);
 
-            inputValue newValue = {timeStamp, value, (r_label == 0 ? false : true)};
+            inputValue newValue = {timeStamp, value, (r_label == 0 ? false : true), i};
 
             X.push_back(newValue);
         }
@@ -442,6 +438,39 @@ void LoadData(string fileName) {
 
 
 }
+
+void LoadDataTest(string fileName) {
+    fstream handler;
+
+    datasetSize = CountInstances(fileName); // zlicz l. instancji w pliku
+
+    handler.open(fileName);
+    for (int i = 0; i < datasetSize; i++) {
+
+        string line;
+        getline(handler, line);
+        stringstream linestream(line);
+        string dataPortion;
+
+        if (line != "" && i >=  floor(datasetSize*0.4)) {
+            getline(linestream, dataPortion, ',');
+            string timeStamp = dataPortion;
+            getline(linestream, dataPortion, ',');
+            double value = stod(dataPortion);
+            getline(linestream, dataPortion, ' ');
+            int r_label = stoi(dataPortion);
+
+            inputValue newValue = {timeStamp, value, (r_label == 0 ? false : true), i};
+
+            X.push_back(newValue);
+        }
+    }
+    handler.close();
+
+
+}
+
+
 
 void ClearStructures() {
     for (int i = 0; i < OutputNeurons.size(); i++) {

@@ -34,6 +34,7 @@ struct inputValue
     string timeStamp;
     double value;
     bool r_label;
+    int t;
 };  //input value read from input file
 
 struct GRFstruct
@@ -68,7 +69,8 @@ extern vector<GRFstruct> GRFs; //input GRFs
 extern vector<vector<inputNeuron>> spikeOrder; //firing order of input neurons for current X[t]
 
 
-void LoadData(string fileName);
+void LoadDataTrain(string fileName);
+void LoadDataTest(string fileName);
 int CountInstances(string fileName);
 
 void InitializeGRFs(vector<double> Window);
@@ -81,7 +83,7 @@ void TraineSNN(); //main procedure of eSNN-RTAD
 void SaveResults(string filePath);
 void ClearStructures();
 void SaveMetrics(string, double, double, double, double);
-void SaveMetricsTrace(string, double, double, double, double);
+void SaveMetricsOverall(string, double, double, double);
 
 struct ConfusionMatrixStruct
 {
@@ -105,6 +107,10 @@ struct data_auc_struct
 };
 
 double CalculateAUC();
+
+
+double CalculateAvgW(vector<double> vec); //average of values in vec
+double CalculateStdW(vector<double> vec, double avg); //standard deviation of values in vec
 
 
 #endif //ESNN_RTAD_ESNN_H
