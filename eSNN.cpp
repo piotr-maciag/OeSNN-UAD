@@ -349,7 +349,7 @@ void SaveResults(string filePath) {
 
     handler << "timestamp,value,predicted_value,error,p_label,fired,r_label" << endl;
     for (int t = 0; t < X.size(); t++) {
-        handler << setprecision(12) << X[t].t << "," << X[t].timeStamp << "," << X[t].value << "," << Y[t] << "," << E[t] << "," << U[t]
+        handler << setprecision(12) << X[t].timeStamp << "," << X[t].value << "," << Y[t] << "," << E[t] << "," << U[t]
                 << ",";
         handler << NeuronFired[t] << "," << X[t].r_label;
         handler << endl;
@@ -409,13 +409,13 @@ bool compValDataSort(const data_auc_struct &d1, const data_auc_struct &d2) {
     return d1.value > d2.value;
 }
 
-void LoadDataTrain(string fileName) {
+void LoadData(string fileName) {
     fstream handler;
 
     datasetSize = CountInstances(fileName); // zlicz l. instancji w pliku
 
     handler.open(fileName);
-    for (int i = 0; i < floor(datasetSize*0.4); i++) {
+    for (int i = 0; i < datasetSize; i++) {
         string line;
         getline(handler, line);
         stringstream linestream(line);
@@ -429,7 +429,7 @@ void LoadDataTrain(string fileName) {
             getline(linestream, dataPortion, ' ');
             int r_label = stoi(dataPortion);
 
-            inputValue newValue = {timeStamp, value, (r_label == 0 ? false : true), i};
+            inputValue newValue = {timeStamp, value, (r_label == 0 ? false : true)};
 
             X.push_back(newValue);
         }
@@ -438,39 +438,6 @@ void LoadDataTrain(string fileName) {
 
 
 }
-
-void LoadDataTest(string fileName) {
-    fstream handler;
-
-    datasetSize = CountInstances(fileName); // zlicz l. instancji w pliku
-
-    handler.open(fileName);
-    for (int i = 0; i < datasetSize; i++) {
-
-        string line;
-        getline(handler, line);
-        stringstream linestream(line);
-        string dataPortion;
-
-        if (line != "" && i >=  floor(datasetSize*0.4)) {
-            getline(linestream, dataPortion, ',');
-            string timeStamp = dataPortion;
-            getline(linestream, dataPortion, ',');
-            double value = stod(dataPortion);
-            getline(linestream, dataPortion, ' ');
-            int r_label = stoi(dataPortion);
-
-            inputValue newValue = {timeStamp, value, (r_label == 0 ? false : true), i};
-
-            X.push_back(newValue);
-        }
-    }
-    handler.close();
-
-
-}
-
-
 
 void ClearStructures() {
     for (int i = 0; i < OutputNeurons.size(); i++) {

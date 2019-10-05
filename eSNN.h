@@ -34,7 +34,6 @@ struct inputValue
     string timeStamp;
     double value;
     bool r_label;
-    int t;
 };  //input value read from input file
 
 struct GRFstruct
@@ -69,8 +68,7 @@ extern vector<GRFstruct> GRFs; //input GRFs
 extern vector<vector<inputNeuron>> spikeOrder; //firing order of input neurons for current X[t]
 
 
-void LoadDataTrain(string fileName);
-void LoadDataTest(string fileName);
+void LoadData(string fileName);
 int CountInstances(string fileName);
 
 void InitializeGRFs(vector<double> Window);

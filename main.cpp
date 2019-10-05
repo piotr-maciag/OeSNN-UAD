@@ -30,6 +30,8 @@ int main() {
     string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
                   "\\Datasets\\numenta\\";
 
+    string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+                         "\\Results\\numenta_fMeasure_optimization\\";
 
     vector<string> folders = {
             "artificialNoAnomaly",
@@ -67,7 +69,7 @@ int main() {
         double o_NOsize, o_Wsize, o_NIsize, o_Beta, o_TS, o_sim, o_mod, o_C, o_ErrorFactor, o_AnomalyFactor; //optimal found parametes of eSNN
 
         double NOsize_b = 50, NOsize_e = 50, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
-        double Wsize_b = 200, Wsize_e = 400, Wsize_s = 100;
+        double Wsize_b = 100, Wsize_e = 600, Wsize_s = 100;
         double NIsize_b = 10, NIsize_e = 10, NIsize_s = 20;
         double Beta_b = 1.6, Beta_e = 1.6, Beta_s = 0.2;
         double TS_b = 1000, TS_e = 1000, TS_s = 1000;
@@ -99,9 +101,6 @@ int main() {
             cout << "#####################################################################" << endl;
             cout << folder << "/" << files[i] << endl;
 
-            string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
-                                 "\\Results\\numenta_fMeasure_optimization\\train\\";
-
             for (double NOsize_c = NOsize_b; NOsize_c <= NOsize_e; NOsize_c += NOsize_s) {
                 for (double Wsize_c = Wsize_b; Wsize_c <= Wsize_e; Wsize_c += Wsize_s) {
                     for (double NIsize_c = NIsize_b; NIsize_c <= NIsize_e; NIsize_c += NIsize_s) {
@@ -120,7 +119,7 @@ int main() {
                                                     TS = TS_c, sim = sim_c, mod = mod_c, C = C_c, ErrorFactor = ErrorFactor_c,
                                                     AnomalyFactor = AnomalyFactor_c;
 
-                                                    LoadDataTrain(dirPath + "\\" + files[i]); //load dataset
+                                                    LoadData(dirPath + "\\" + files[i]); //load dataset
 
                                                     TraineSNN(); //train eSNN with given set of parameters
 
@@ -135,10 +134,6 @@ int main() {
                                                         maxFMeasure = fMeasure;
                                                         maxPrecision = precision;
                                                         maxRecall = recall;
-
-                                                        o_NOsize = NOsize, o_Wsize = Wsize, o_NIsize = NIsize, o_Beta = Beta,
-                                                        o_TS = TS, o_sim = sim, o_mod = mod, o_C = C, o_ErrorFactor = ErrorFactor,
-                                                        o_AnomalyFactor = AnomalyFactor;
 
                                                         string resultsFilePath =
                                                                 resultsPath + "\\" + folder + "\\" + folder + "_" +
@@ -163,45 +158,13 @@ int main() {
                 }
             }
 
-            resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
-                                 "\\Results\\numenta_fMeasure_optimization\\test\\";
-
-            NOsize = o_NOsize, Wsize = o_Wsize, NIsize = o_NIsize, Beta = o_Beta,
-            TS = o_TS, sim = o_sim, mod = o_mod, C = o_C, ErrorFactor = o_ErrorFactor,
-            AnomalyFactor = o_AnomalyFactor;
-
-            LoadDataTest(dirPath + "\\" + files[i]); //load dataset
-
-            TraineSNN(); //train eSNN with given set of parameters
-
-            CalculateConfusionMatrix(); //calculate confusion Matrix
-            double precisionTest = CalculatePrecision(); //calculate statistics
-            double recallTest = CalculateRecall();
-            double fMeasureTest = CalculateF_Measure(precisionTest, recallTest);
-
-
-            cout << "Precision " << precisionTest << " Recall " << recallTest << " fMeasure "
-                 << fMeasureTest << endl;
-            dataFile_Precision.push_back(precisionTest);
-            dataFile_Recall.push_back(recallTest);
-            dataFile_FMeasure.push_back(fMeasureTest);
-
-            string resultsFilePath =
-                    resultsPath + "\\" + folder + "\\" + folder + "_" +
-                    files[i];
-            SaveResults(resultsFilePath);
-            string metricsFilePath =
-                    resultsPath + "\\" + folder + "\\" + "metr_" + folder +
-                    "_" + files[i];
-            SaveMetrics(metricsFilePath, precisionTest,
-                        recallTest, fMeasureTest, 0);
-
-            ClearStructures();
+            cout << "Precision " << maxPrecision << " Recall " << maxRecall << " fMeasure "
+                 << maxFMeasure << endl;
+            dataFile_Precision.push_back(maxPrecision);
+            dataFile_Recall.push_back(maxRecall);
+            dataFile_FMeasure.push_back(maxFMeasure);
 
         }
-
-        string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
-                             "\\Results\\numenta_fMeasure_optimization\\test\\";
 
         double precisionOverall = CalculateAvgW(dataFile_Precision);
         double recallOverall = CalculateAvgW(dataFile_Recall);
