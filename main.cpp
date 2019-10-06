@@ -6,6 +6,7 @@
 using namespace std;
 
 void ReadDirectory(const std::string &name, vector<string> &v) {
+    v.clear();
     std::string pattern(name);
     pattern.append("\\*");
     WIN32_FIND_DATA data;
@@ -26,29 +27,27 @@ void PrintActualParameters() {
 
 int main() {
 
-
+/*
     string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
                   "\\Datasets\\numenta\\";
 
-    string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
-                         "\\Results\\numenta_fMeasure_optimization\\";
 
     vector<string> folders = {
-            "artificialNoAnomaly",
+      //      "artificialNoAnomaly",
             "artificialWithAnomaly",
             "realAdExchange",
             "realAWSCloudwatch",
-            "realKnownCause",
+    //        "realKnownCause",
             "realTraffic",
             "realTweets"
     };
 
-/*
+*/
     string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
                   "\\Datasets\\Yahoo\\";
 
-    string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
-                         "\\Results\\yahoo_fMeasure_optimization\\";
+    //string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+     //                    "\\Results\\yahoo_fMeasure_optimization\\train\\";
 
     vector<string> folders = {
             "A1Benchmark",
@@ -56,12 +55,16 @@ int main() {
             "A3Benchmark",
             "A4Benchmark",
     };
-*/
+
+
 
     for (int j = 0; j < folders.size(); j++) {
         string folder = folders[j];
 
-        string dirPath = path + "\\" + folder;
+        string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+                      "\\Datasets\\Yahoo\\";
+
+        string dirPath = path + "\\" + folder + "\\train";
         vector<string> files;
 
         ReadDirectory(dirPath, files); //load all datafiles from a directory
@@ -69,7 +72,7 @@ int main() {
         double o_NOsize, o_Wsize, o_NIsize, o_Beta, o_TS, o_sim, o_mod, o_C, o_ErrorFactor, o_AnomalyFactor; //optimal found parametes of eSNN
 
         double NOsize_b = 50, NOsize_e = 50, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
-        double Wsize_b = 100, Wsize_e = 600, Wsize_s = 100;
+        double Wsize_b = 300, Wsize_e = 300, Wsize_s = 100;
         double NIsize_b = 10, NIsize_e = 10, NIsize_s = 20;
         double Beta_b = 1.6, Beta_e = 1.6, Beta_s = 0.2;
         double TS_b = 1000, TS_e = 1000, TS_s = 1000;
@@ -77,7 +80,7 @@ int main() {
         double mod_b = 0.6, mod_e = 0.6, mod_s = 0.1;
         double C_b = 0.6, C_e = 0.6, C_s = 0.1;
         double ErrorFactor_b = 0.9, ErrorFactor_e = 0.9, ErrorFactor_s = 0.1;
-        double AnomalyFactor_b = 2, AnomalyFactor_e = 7, AnomalyFactor_s = 1;
+        double AnomalyFactor_b = 10, AnomalyFactor_e = 10, AnomalyFactor_s = 1;
 
 /*
        double NOsize_b = 50, NOsize_e = 50, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
@@ -92,7 +95,12 @@ int main() {
         double AnomalyFactor_b = 2, AnomalyFactor_e = 18, AnomalyFactor_s = 1;
 
 */
-        vector<double> dataFile_Precision, dataFile_Recall, dataFile_FMeasure, dataFile_AUC;
+
+        string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+                             "\\Results\\yahoo_fMeasure_optimization\\" + folder + "\\train\\";
+
+        double avgWin = 0.0;
+        double avgerrFact = 0.0;
 
         for (int i = 2; i < files.size(); i++) {
 
@@ -100,6 +108,7 @@ int main() {
 
             cout << "#####################################################################" << endl;
             cout << folder << "/" << files[i] << endl;
+
 
             for (double NOsize_c = NOsize_b; NOsize_c <= NOsize_e; NOsize_c += NOsize_s) {
                 for (double Wsize_c = Wsize_b; Wsize_c <= Wsize_e; Wsize_c += Wsize_s) {
@@ -135,12 +144,16 @@ int main() {
                                                         maxPrecision = precision;
                                                         maxRecall = recall;
 
+                                                        o_NOsize = NOsize, o_Wsize = Wsize, o_NIsize = NIsize, o_Beta = Beta,
+                                                        o_TS = TS, o_sim = sim, o_mod = mod, o_C = C, o_ErrorFactor = ErrorFactor,
+                                                        o_AnomalyFactor = AnomalyFactor;
+
                                                         string resultsFilePath =
-                                                                resultsPath + "\\" + folder + "\\" + folder + "_" +
+                                                                resultsPath + folder + "_" +
                                                                 files[i];
                                                         SaveResults(resultsFilePath);
                                                         string metricsFilePath =
-                                                                resultsPath + "\\" + folder + "\\" + "metr_" + folder +
+                                                                resultsPath + "metr_" + folder +
                                                                 "_" + files[i];
                                                         SaveMetrics(metricsFilePath, precision,
                                                                     recall, fMeasure, 0);
@@ -158,11 +171,59 @@ int main() {
                 }
             }
 
-            cout << "Precision " << maxPrecision << " Recall " << maxRecall << " fMeasure "
-                 << maxFMeasure << endl;
-            dataFile_Precision.push_back(maxPrecision);
-            dataFile_Recall.push_back(maxRecall);
-            dataFile_FMeasure.push_back(maxFMeasure);
+            avgWin += o_Wsize;
+            avgerrFact += o_AnomalyFactor;
+
+        }
+
+        avgWin /= (files.size() - 2);
+        avgerrFact /= (files.size() - 2);
+
+        cout << "xxx" << endl;
+        path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+                      "\\Datasets\\Yahoo\\";
+
+        dirPath = path + "\\" + folder + "\\test";
+        ReadDirectory(dirPath, files); //load all datafiles from a directory
+
+        resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
+                      "\\Results\\yahoo_fMeasure_optimization\\" + folder + "\\test\\";
+
+        vector<double> dataFile_Precision, dataFile_Recall, dataFile_FMeasure, dataFile_AUC;
+
+        for (int i = 2; i < files.size(); i++) {
+
+            NOsize = o_NOsize, Wsize = floor(avgWin), NIsize = o_NIsize, Beta = o_Beta,
+            TS = o_TS, sim = o_sim, mod = o_mod, C = o_C, ErrorFactor = o_ErrorFactor,
+            AnomalyFactor = floor(avgerrFact);
+
+            LoadData(dirPath + "\\" + files[i]); //load dataset
+
+            TraineSNN(); //train eSNN with given set of parameters
+
+            CalculateConfusionMatrix(); //calculate confusion Matrix
+            double precisionTest = CalculatePrecision(); //calculate statistics
+            double recallTest = CalculateRecall();
+            double fMeasureTest = CalculateF_Measure(precisionTest, recallTest);
+
+
+            cout << "Precision " << precisionTest << " Recall " << recallTest << " fMeasure "
+                 << fMeasureTest << endl;
+            dataFile_Precision.push_back(precisionTest);
+            dataFile_Recall.push_back(recallTest);
+            dataFile_FMeasure.push_back(fMeasureTest);
+
+            string resultsFilePath =
+                    resultsPath + folder + "_" +
+                    files[i];
+            SaveResults(resultsFilePath);
+            string metricsFilePath =
+                    resultsPath  + "metr_" + folder +
+                    "_" + files[i];
+            SaveMetrics(metricsFilePath, precisionTest,
+                        recallTest, fMeasureTest, 0);
+
+            ClearStructures();
 
         }
 
@@ -170,15 +231,14 @@ int main() {
         double recallOverall = CalculateAvgW(dataFile_Recall);
         double fMeasureOverall = CalculateAvgW(dataFile_FMeasure);
 
-        cout << "Precision overall " << precisionOverall << " Recall overall " << recallOverall << " fMeasure overall "
+        cout << "Precision overall " << precisionOverall << " Recall overall " << recallOverall
+             << " fMeasure overall "
              << fMeasureOverall << endl;
 
-        string metricsFilePath = resultsPath + "\\" + folder + "\\" +
+        string metricsFilePath = resultsPath  +
                                  "metr_Overall_Optimal_" + folder;
         SaveMetricsOverall(metricsFilePath, precisionOverall, recallOverall,
                            fMeasureOverall);
-
-
 
     }
 
