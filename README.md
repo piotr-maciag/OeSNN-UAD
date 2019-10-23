@@ -4,7 +4,7 @@
 
 ### eSNN.h
 
-Contains declarations of variables, structures and functions of the proposed eSNN architecture. Implemented by main.cpp. No changes should be made in this file.
+Contains declarations of variables, structures and functions of the proposed eSNN architecture. Imported by main.cpp. No changes should be made in this file.
 
 ### eSNN.cpp
 
