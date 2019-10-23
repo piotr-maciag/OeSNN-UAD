@@ -23,3 +23,7 @@ The input file should contain three columns: the first one bing series of timest
 
 
 
+
+## Contact
+
+For questions contact Piotr Maciąg: piotr.maciag@pw.edu.pl
