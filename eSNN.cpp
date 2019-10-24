@@ -257,7 +257,7 @@ neuron *NeuronSpikeFirst() { //obtain neuron from output repository, which spike
     }
 }
 
-void TraineSNN() { //main RTAD-eSNN procedure
+void TraineSNN() { //main eSNN procedure
 
     CNOsize = 0;
     for (int j = 0; j < NIsize; j++) {
@@ -439,6 +439,7 @@ void LoadData(string fileName) {
 
 }
 
+//Clear all structures after each eSNN training and classification
 void ClearStructures() {
     for (int i = 0; i < OutputNeurons.size(); i++) {
         delete OutputNeurons[i];

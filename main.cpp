@@ -5,6 +5,7 @@
 
 using namespace std;
 
+//Read all data files in a given directory
 void ReadDirectory(const std::string &name, vector<string> &v) {
     std::string pattern(name);
     pattern.append("\\*");
@@ -26,6 +27,8 @@ void PrintActualParameters() {
 
 int main() {
 
+
+    //comment or uncoment lines 31-63 base on benchmark you want to test
 /*
     string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
                   "\\Datasets\\numenta\\";
@@ -44,6 +47,7 @@ int main() {
     };
 
 */
+
     string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
                   "\\Datasets\\Yahoo\\";
     string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
@@ -65,7 +69,9 @@ int main() {
         ReadDirectory(dirPath, files); //load all datafiles from a directory
 
         double o_NOsize, o_Wsize, o_NIsize, o_Beta, o_TS, o_sim, o_mod, o_C, o_ErrorFactor, o_AnomalyFactor; //optimal found parametes of eSNN
-/*
+
+        //below set parameters for the selected benchmark
+/*  //Numenta benchmark parameters set
         double NOsize_b = 50, NOsize_e = 50, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
         double Wsize_b = 100, Wsize_e = 600, Wsize_s = 100;
         double NIsize_b = 10, NIsize_e = 10, NIsize_s = 20;
@@ -78,6 +84,7 @@ int main() {
         double AnomalyFactor_b = 2, AnomalyFactor_e = 7, AnomalyFactor_s = 1;
 
 */
+    //Yahoo benchmark parameters set
        double NOsize_b = 50, NOsize_e = 50, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
         double Wsize_b = 20, Wsize_e = 500, Wsize_s = 20;
         double NIsize_b = 10, NIsize_e = 10, NIsize_s = 20;
