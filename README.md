@@ -43,7 +43,7 @@ For Numenta Anomaly Benchmark it is neccessary to include anomaly labels of inpu
 
 For Yahoo Anomaly Dataset all columns besides timestamp, input value and anomaly label should be removed from data files.  
 
-The eSNN prameters for grid search optimization on Numenta and Yahoo datasets are given in text files Numenta_opt_parameters and Yahoo_opt_parameters, respectively. 
+The eSNN prameters for grid search optimization on Numenta and Yahoo datasets are given in text files *Numenta_opt_parameters* and *Yahoo_opt_parameters*, respectively. 
 
 The results should be included in the *Results* folder. Please remember to appropriately adjust your folder paths at the begining of *main* function in the *main.cpp* file.
 
