@@ -8,13 +8,11 @@ Contains declarations of variables, structures and functions of the proposed eSN
 
 ### eSNN.cpp
 
-Definitions of functions and variables used by the proposed eSNN architecture. In particular *TraineSNN()* is the main function called in the *main.cpp* file.
+Definitions of functions and variables used by the proposed eSNN architecture. In particular, *TraineSNN()* is the main function called in the *main.cpp* file.
 
 ### main.cpp
 
-Main file of the project. 
-
-
+Main file of the project. To produce anomaly classification results on your data files or data file in anomaly detection benchmarks you need change paths at the begining of *main* function. 
 
 
 ## Input Data Format
@@ -26,7 +24,7 @@ Each input data file should contain three columns: the first one bing series of 
   
 Input data files should not contain column headers. Rows in data files should not be numbered. 
 
-Generally you should include your data files in the *Dataset* folder and results will be procuded to the *Results* folder.
+Generally you should include your data files in the *Dataset* folder and results will be produced to the *Results* folder.
 
 ## Results for Numenta Anomaly Benchmark and Yahoo Anomaly Dataset
 
