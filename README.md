@@ -24,7 +24,7 @@ Each input data file should contain three columns: the first one being series of
   
 Input data files should not contain column headers. Rows in data files should not be numbered. 
 
-Generally you should include your data files in *Dataset* folder and results will be produced to *Results* folder.
+Generally you should include your data files in *Dataset* folder and results will be produced to *Results* folder. Please note that the file listing procedure given in *main.cpp* is written for Windows. In a case of other platforms you need to replace it with your own procedure for listing all files in a directory.
 
 ## Results Data Files
 
