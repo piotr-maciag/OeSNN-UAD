@@ -28,7 +28,7 @@ Generally you should include your data files in the *Dataset* folder and results
 
 ## Results for Numenta Anomaly Benchmark and Yahoo Anomaly Dataset
 
-To reproduce the results reported in our paper on Numenta and Yahoo benchmarks you need to include input data files in the folders *Dataset/Numenta* or *Dataset/Yahoo*, respectively. Each data file should contain three time series: timestamp, input value and anomaly label. Please assure that column headers are not provided in data files.
+To reproduce the results reported in our paper on Numenta and Yahoo benchmarks you need to include input data files of these two benchmarks grouped into categories in the folders *Dataset/Numenta* or *Dataset/Yahoo*, respectively. Each data file should contain three time series: timestamp, input value and anomaly label. Please assure that column headers are not provided in data files.
 
 For Numenta Anomaly Benchmark it is neccessary to include anomaly labels of input values in each data file as originally only timestamps and input values time series are provided in data files. To do that you can either copy anomaly labels column from one of the results file of the anomaly detection algorithms implemented in Numenta benchmark or use file *combined_labels.json* contained in *labels* folder of Numenta benchmark. 
 
