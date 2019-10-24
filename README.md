@@ -28,7 +28,7 @@ Generally you should include your data files in *Dataset* folder and results wil
 
 ## Results Data Files
 
-The proposed eSNN architecture for each input data file will produce two results files: the first one being csv file, which contain the same three columns as input data file and also predicted value *y* of each input value, error between input value and predicted value, the age of the neuron responsible for providing output value *y* and classification of input value as anomaly or not. The second data file starts with prefix *metr_* and contains optimal learning parameters of eSNN for the respective input data file.
+The proposed eSNN architecture for each input data file will produce two results files: the first one being csv file, which contain the same three columns as input data file and also predicted value *y* of each input value, error between input value and predicted value, the age of the neuron responsible for providing output value *y* and classification of input value as anomaly or not. The second produced results file starts with prefix *metr_* and contains optimal learning parameters of eSNN for the respective input data file.
 
 The results are produced to folder *Results*.
 
