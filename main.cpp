@@ -34,11 +34,11 @@ int main() {
                   "\\Datasets\\numenta\\";
 
     string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
-                         "\\Results\\numenta_precision_optimization\\";
+                         "\\Results\\numenta_fMeasure_optimization\\";
 
     vector<string> folders = {
             "artificialNoAnomaly",
-            "artificialWithAnomaly",
+           "artificialWithAnomaly",
             "realAdExchange",
             "realAWSCloudwatch",
             "realKnownCause",
@@ -51,7 +51,7 @@ int main() {
     string path = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
                   "\\Datasets\\Yahoo\\";
     string resultsPath = "F:\\artykuly\\Anomaly detection eSNN\\Software\\eSNN-RTAD"
-                         "\\Results\\yahoo_precision_optimization\\";
+                         "\\Results\\yahoo_fMeasure_optimization\\";
     vector<string> folders = {
             "A1Benchmark",
             "A2Benchmark",
@@ -67,30 +67,29 @@ int main() {
         vector<string> files;
 
         ReadDirectory(dirPath, files); //load all datafiles from a directory
-
-        double o_NOsize, o_Wsize, o_NIsize, o_Beta, o_TS, o_sim, o_mod, o_C, o_ErrorFactor, o_AnomalyFactor; //optimal found parametes of eSNN
+        
 
         //below set parameters for the selected benchmark
 /*  //Numenta benchmark parameters set
         double NOsize_b = 50, NOsize_e = 50, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
         double Wsize_b = 100, Wsize_e = 600, Wsize_s = 100;
         double NIsize_b = 10, NIsize_e = 10, NIsize_s = 20;
-        double Beta_b = 1.6, Beta_e = 1.6, Beta_s = 0.2;
+        double Beta_b = 1.0, Beta_e = 1.0, Beta_s = 0.2;
         double TS_b = 1000, TS_e = 1000, TS_s = 1000;
-        double sim_b = 0.15, sim_e = 0.15, sim_s = 0.15;
+        double sim_b = 0.1, sim_e = 0.1, sim_s = 0.1;
         double mod_b = 0.6, mod_e = 0.6, mod_s = 0.1;
         double C_b = 0.6, C_e = 0.6, C_s = 0.1;
         double ErrorFactor_b = 0.9, ErrorFactor_e = 0.9, ErrorFactor_s = 0.1;
         double AnomalyFactor_b = 2, AnomalyFactor_e = 7, AnomalyFactor_s = 1;
-
 */
+
     //Yahoo benchmark parameters set
        double NOsize_b = 50, NOsize_e = 50, NOsize_s = 100; //parameters for grid search (xxx_b - intial, xxx_e - ending, xxx_s - step)
         double Wsize_b = 20, Wsize_e = 500, Wsize_s = 20;
         double NIsize_b = 10, NIsize_e = 10, NIsize_s = 20;
-        double Beta_b = 1.6, Beta_e = 1.6, Beta_s = 0.2;
+        double Beta_b = 1.0, Beta_e = 1.0, Beta_s = 0.2;
         double TS_b = 1000, TS_e = 1000, TS_s = 1000;
-        double sim_b = 0.15, sim_e = 0.15, sim_s = 0.15;
+        double sim_b = 0.1, sim_e = 0.1, sim_s = 0.1;
         double mod_b = 0.6, mod_e = 0.6, mod_s = 0.1;
         double C_b = 0.8, C_e = 0.8, C_s = 0.1;
         double ErrorFactor_b = 0.9, ErrorFactor_e = 0.9, ErrorFactor_s = 0.1;
@@ -134,9 +133,9 @@ int main() {
                                                     double fMeasure = CalculateF_Measure(precision, recall);
 
 
-                                                    if (precision >
+                                                    if (fMeasure >
                                                         threshold) { //rember parametrs for mzx mean FMeasure
-                                                        threshold = precision;
+                                                        threshold = fMeasure;
                                                         maxFMeasure = fMeasure;
                                                         maxPrecision = precision;
                                                         maxRecall = recall;

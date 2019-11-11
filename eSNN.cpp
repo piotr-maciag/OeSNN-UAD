@@ -141,6 +141,7 @@ void UpdateNeuron(neuron *n_i, neuron *n_s) { //Update neuron n_s in output repo
     }
     n_s->gamma = (n_i->gamma + n_s->gamma * n_s->M) / (n_s->M + 1);
     n_s->outputValue = (n_i->outputValue + n_s->outputValue * n_s->M) / (n_s->M + 1);
+    n_s->additionTime = (n_i->additionTime + n_s->additionTime * n_s->M) / (n_s->M + 1);
     n_s->M += 1;
     delete n_i;
 }
@@ -205,7 +206,7 @@ void ReplaceOldest(neuron *n_i) { //replace the oldets neuron in output repostio
 
 
     for (int l = 1; l < OutputNeurons.size(); l++) {
-        if (oldest < OutputNeurons[l]->additionTime) {
+        if (oldest > OutputNeurons[l]->additionTime) {
             oldest = OutputNeurons[l]->additionTime;
             oldestIdx = l;
         }
@@ -257,7 +258,28 @@ neuron *NeuronSpikeFirst() { //obtain neuron from output repository, which spike
     }
 }
 
+double CalculateMaxDist()
+{
+    vector<double> v1, v2;
+
+    for(int i = 0; i < NIsize; i++)
+    {
+        v1.push_back(pow(mod, NIsize - 1 - i));
+        v2.push_back(pow(mod, i));
+    }
+
+    double diffSq = 0.0;
+
+    for (int j = 0; j < v1.size(); j++) {
+        diffSq += pow(v1[j] - v2[j], 2);
+    }
+
+    return sqrt(diffSq);
+}
+
 void TraineSNN() { //main eSNN procedure
+
+    double Dmax = CalculateMaxDist();
 
     CNOsize = 0;
     for (int j = 0; j < NIsize; j++) {
@@ -308,7 +330,7 @@ void TraineSNN() { //main eSNN procedure
         }
 
 
-        if (CNOsize > 0 && CalculateDistance(n_i->s_weights, n_s->s_weights) <= sim) {
+        if (CNOsize > 0 && CalculateDistance(n_i->s_weights, n_s->s_weights) <= sim*Dmax) {
             UpdateNeuron(n_i, n_s);
         } else if (CNOsize < NOsize) {
             OutputNeurons.push_back(n_i);

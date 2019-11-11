@@ -26,7 +26,7 @@ struct neuron
     double outputValue;
     double M;
     double PSP;
-    int additionTime;
+    double additionTime;
 }; //output neuron structure
 
 struct inputValue
